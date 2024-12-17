@@ -14,7 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedAccount = false;
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -33,30 +33,6 @@ builder.Services.AddSession(options =>
 });
 
 
-async Task CreateRoles(IServiceProvider serviceProvider)
-{
-    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-    // Check if roles exist, if not create them
-    if (!await roleManager.RoleExistsAsync("Admin"))
-        await roleManager.CreateAsync(new IdentityRole("Admin"));
-    if (!await roleManager.RoleExistsAsync("User"))
-        await roleManager.CreateAsync(new IdentityRole("Staff"));
-
-    // Create a default Admin user
-    string adminEmail = "admin2@gmail.com";
-    string password = "@Admin123";
-
-    var adminUser = await userManager.FindByEmailAsync(adminEmail);
-    if (adminUser == null)
-    {
-        var user = new IdentityUser { UserName = adminEmail, Email = adminEmail };
-        await userManager.CreateAsync(user, password);
-        await userManager.AddToRoleAsync(user, "Admin");
-    }
-}
-
 
 var app = builder.Build();
 
@@ -71,12 +47,6 @@ else
     app.UseHsts();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    await CreateRoles(services);
-}
-
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -87,17 +57,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "areas",
-        pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}");
-    endpoints.MapRazorPages();
-});
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute(
+//        name: "areas",
+//        pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}");
+//    endpoints.MapRazorPages();
+//});
 
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();
