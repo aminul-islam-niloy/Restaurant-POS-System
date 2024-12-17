@@ -122,7 +122,8 @@ namespace Restaurant_POS_System.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    // Automatically assign the 'Staff' role to the user
+                 
+                    //await _userManager.AddToRoleAsync(user, "Admin");
                     await _userManager.AddToRoleAsync(user, "Staff");
 
                     var userId = await _userManager.GetUserIdAsync(user);
