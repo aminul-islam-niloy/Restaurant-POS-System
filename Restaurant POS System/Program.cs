@@ -57,17 +57,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllerRoute(
-//        name: "areas",
-//        pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}");
-//    endpoints.MapRazorPages();
-//});
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "areas",
+        pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}");
+    endpoints.MapRazorPages();
+});
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+//app.MapRazorPages();
 
 app.Run();
