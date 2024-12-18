@@ -1,38 +1,103 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Add New Staff";
 }
 
-<h1>@ViewData["Title"]</h1>
+<style>
+    body {
+        background-color: #f8f9fa;
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-   
+        height: 100vh;
+        margin: 0;
+    }
+    .card {
+        width: 400px;
+        padding: 2rem;
+        margin-top:90px;
+        margin-left:240px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 40%;
+        cursor: pointer;
+    }
+    .form-floating {
+        position: relative;
+    }
+    .logo {
+        display: block;
+        margin: 0 auto 1rem;
+        width: 100px;
+    }
+
+
+
+</style>
+
+<div class="card">
+    <a href="javascript:history.back()" ><i class="fa fa-arrow-left"></i></a>
+    <img src="~/images/logos/restaurant.png" alt="Logo" class="logo" />
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <!-- Email Field -->
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="Email" />
+            <label asp-for="Input.Email">Email</label>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Password" type="password" id="password" class="form-control" autocomplete="current-password" placeholder="Password" />
+            <label asp-for="Input.Password">Password</label>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <i class="fa fa-eye password-toggle" id="togglePassword"></i>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.ConfirmPassword" type="password" id="confirmPassword" class="form-control" autocomplete="new-password" placeholder="Confirm Password" />
+            <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            <i class="fa fa-eye password-toggle" id="togglePassword2"></i>
+        </div>
+
+        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Add New Staff</button>
+
+        <div class="text-center mt-3">
+           @*  <a asp-page="./ForgotPassword">Forgot your password?</a><br /> *@
+            @* <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a><br /> *@
+        </div>
+    </form>
 </div>
 
+<!-- Scripts -->
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Password Toggle for Confirm Password Field
+        const togglePassword2 = document.getElementById('togglePassword2');
+        const confirmPassword = document.getElementById('confirmPassword');
+        togglePassword2.addEventListener('click', function () {
+            const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPassword.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 }
