@@ -1,84 +1,74 @@
 ﻿@model Restaurant_POS_System.Models.MenuItem
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Item Details";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <h3>@ViewData["Title"]</h3>
 
-<div>
-    <h4>MenuItem</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsAvailable)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsAvailable)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class="col-sm-10">
-            <img src="@(Url.Content(Model.ImageUrl))" alt="@Model.Name" style="width:50px; height:50px;" />
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QuantityType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.QuantityType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AdditionTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AdditionTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Discount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Discount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DiscountPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DiscountPrice)
-        </dd>
-    </dl>
+
+    <div class="row">
+        <!-- Left Section: Text Details -->
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Name)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Price)</dt>
+                <dd class="col-sm-8">$@Html.DisplayFor(model => model.Price)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Description)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.IsAvailable)</dt>
+                <dd class="col-sm-8">
+                    @if (Model.IsAvailable)
+                    {
+                        <span class="badge bg-success">Available</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Not Available</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Quantity)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Quantity)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Category)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Category.CategoryName)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.QuantityType)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.QuantityType)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.AdditionTime)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.AdditionTime)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Discount)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Discount)%</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DiscountPrice)</dt>
+                <dd class="col-sm-8">$@Html.DisplayFor(model => model.DiscountPrice)</dd>
+            </dl>
+
+            <div class="d-flex  gap-2">
+            <a asp-action="Index" class="btn btn-secondary">Back to List </a>
+            <a class="btn  btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            </div>
+        </div>
+
+        <div class="col-md-6 text-center">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="Menu Item Image" style="max-width: 300px;" />
+            }
+            else
+            {
+                <p>No image available</p>
+            }
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

@@ -116,18 +116,24 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
             return View(menuItem);
         }
 
-        // POST: Admin/MenuItems/Edit/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,  MenuItem menuItem, IFormFile imageFile)
+        public async Task<IActionResult> Edit(int id, MenuItem menuItem, IFormFile imageFile)
         {
             if (id != menuItem.Id)
             {
                 return NotFound();
             }
+       
 
+            var existingMenuItem = await _context.MenuItems.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            if (existingMenuItem == null)
+            {
+                return NotFound();
+            }
 
-            // Handle Image Upload
+            menuItem.AdditionTime = existingMenuItem.AdditionTime;
             if (imageFile != null && imageFile.Length > 0)
             {
                 var fileName = Path.GetFileName(imageFile.FileName);
@@ -138,15 +144,32 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
                     await imageFile.CopyToAsync(stream);
                 }
 
-                // Set the ImageUrl property
                 menuItem.ImageUrl = "/images/" + fileName;
             }
+            else
+            {
+                menuItem.ImageUrl = existingMenuItem.ImageUrl;
+            }
 
-            _context.Update(menuItem);
-            await _context.SaveChangesAsync();
+            try
+            {
+
+                _context.Update(menuItem);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MenuItemExists(menuItem.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             return RedirectToAction(nameof(Index));
-
-
         }
 
 

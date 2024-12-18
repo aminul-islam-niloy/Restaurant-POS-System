@@ -4,80 +4,98 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
 
-<h4>MenuItem</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
+<div id="menu-item-create-container">
+    <div class="menu-item-card">
+        <h4 class="menu-item-title">Create Menu Item</h4>
+        <form class="menu-item-form" asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="imageFile" class="control-label">Image</label>
-                <input type="file" name="imageFile" class="form-control" />
+
+            <div class="menu-item-row">
+
+                <div class="menu-item-left">
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Price"></label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Quantity"></label>
+                        <input asp-for="Quantity" class="form-control" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+
+                    <!-- Old Image Preview -->
+                    <div class="form-group">
+                        <label for="existingImage" class="control-label">Current Image</label>
+                        <div>
+                            <img id="existingImage" src="@Model.ImageUrl" alt="Current image" style="max-height: 150px;" />
+                        </div>
+                    </div>
+
+                    <!-- Upload New Image -->
+                    <div class="form-group">
+                        <label for="imageFile" class="control-label">New Image</label>
+                        <input type="file" id="imageFile" name="imageFile" class="form-control" />
+                        <small class="form-text text-muted">If no new image is selected, the current image will be retained.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CategoryId"></label>
+                        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                    </div>
+             
+
+                    <div class="form-group">
+                        <label asp-for="QuantityType"></label>
+                        <select asp-for="QuantityType" class="form-control"
+                                asp-items="@(new SelectList(Enum.GetValues(typeof(Restaurant_POS_System.Models.QuantityType))))">
+                            <option value="">-- Select Quantity Type --</option>
+                        </select>
+                        <span asp-validation-for="QuantityType" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Discount"></label>
+                        <input asp-for="Discount" class="form-control" />
+                        <span asp-validation-for="Discount" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="DiscountPrice"></label>
+                        <input asp-for="DiscountPrice" class="form-control" />
+                        <span asp-validation-for="DiscountPrice" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="QuantityType" class="control-label"></label>
-                <select asp-for="QuantityType" class="form-control"
-                        asp-items="@(new SelectList(Enum.GetValues(typeof(Restaurant_POS_System.Models.QuantityType))))">
-                    <option value="">-- Select Quantity Type --</option>
-                </select>
-                <span asp-validation-for="QuantityType" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Discount" class="control-label"></label>
-                <input asp-for="Discount" class="form-control" />
-                <span asp-validation-for="Discount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiscountPrice" class="control-label"></label>
-                <input asp-for="DiscountPrice" class="form-control" />
-                <span asp-validation-for="DiscountPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <div class="menu-item-buttons">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
