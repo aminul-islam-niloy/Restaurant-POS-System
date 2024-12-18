@@ -2833,6 +2833,62 @@ progress {
           margin-inline-end: 1rem;
 }
 
+
+
+
+
+#menu-items-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+    #menu-items-header .btn {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+#menu-items-table img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+#menu-items-table th,
+#menu-items-table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+#menu-items-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+#menu-items-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#menu-items-table tr:hover {
+    background-color: #e9ecef;
+}
+
+#menu-items-table .btn {
+    margin: 0 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+
+
+
+
+
+
 textarea.form-control {
   min-height: calc(1.5em + 16px + calc(var(--bs-border-width) * 2));
 }

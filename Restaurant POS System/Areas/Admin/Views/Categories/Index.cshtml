@@ -11,7 +11,7 @@
 </div>
 
 
-<table class="table" >
+<table class="table" id="menu-items-table">
     <thead>
         <tr>
             <th></th>
@@ -42,8 +42,9 @@
                     @Html.DisplayFor(modelItem => item.CategoryName)
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> 
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a>
+
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
                 </td>
                 <td></td>
             </tr>
