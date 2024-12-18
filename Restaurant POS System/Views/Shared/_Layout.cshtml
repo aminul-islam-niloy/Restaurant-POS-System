@@ -30,7 +30,7 @@
                             <a class="sidebar-link" href="./index.html" aria-expanded="false">
                                 <iconify-icon icon="solar:widget-add-line-duotone"></iconify-icon>
                                 <span class="hide-menu">Dashboard</span>
-                                
+
                             </a>
                         </li>
                         <li>
@@ -135,10 +135,11 @@
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
 
                             <partial name="_LoginPartial" />
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link " href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                                    aria-expanded="false">
-                                    <img src="~/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                                    <img src="~/images/profile/user.png" alt="" width="35" height="35" class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                                     <div class="message-body">
@@ -165,25 +166,29 @@
             <!--  Header End -->
             <div class="body-wrapper-inner">
                 <div class="container-fluid">
-   
+
                     <div class="container">
                         <main role="main" class="pb-3">
                             @RenderBody()
                         </main>
                     </div>
 
-                    <footer class="border-top footer text-muted"
-                            style=" bottom: 10px; width: 100%; min-height: 40px; background-color: #f8f9fa;    ">
-                        <div class="container mt-3 ">
-                           <p style="justify-content:center">
-                                &copy; 2024 Restaurant POS System <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                           </p>
-                        </div>
-                    </footer>
 
                 </div>
+
+
             </div>
+          
         </div>
+
+        <footer class="sticky-footer bg-white " style="height:40px">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Resturent POS System 2024</span>
+                </div>
+            </div>
+        </footer>
+
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
