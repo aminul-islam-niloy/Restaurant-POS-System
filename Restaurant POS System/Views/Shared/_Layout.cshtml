@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    string userId = UserManager.GetUserId(User);
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -17,6 +26,10 @@
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
          data-sidebar-position="fixed" data-header-position="fixed">
         <!-- Sidebar Start -->
+
+        @if (SignInManager.IsSignedIn(User))
+          {
+                           
         <aside class="left-sidebar">
             <!-- Sidebar scroll-->
             <div class="container">
@@ -26,7 +39,7 @@
                     <ul id="sidebarnav">
                         <li class="nav-small-cap">
                             <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
-                            <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a asp-area="Admin" asp-controller="MenuItems" asp-action="Index">Home Menu</a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="./index.html" aria-expanded="false">
@@ -118,6 +131,8 @@
             <!-- End Sidebar scroll-->
         </aside>
         <!--  Sidebar End -->
+           }
+
         <!--  Main wrapper -->
         <div class="body-wrapper">
             <!--  Header Start -->
@@ -136,7 +151,9 @@
                     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
 
-                            <partial name="_LoginPartial" />
+
+                            @if (SignInManager.IsSignedIn(User))
+                           {
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link " href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
@@ -157,10 +174,25 @@
                                             <i class="ti ti-list-check fs-6"></i>
                                             <p class="mb-0 fs-3">My Task</p>
                                         </a>
-                                        <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "MenuItems", new { area = "Admin" })">
+                                                <button type="submit" class=" d-flex align-items-center gap-2 dropdown-item">
+                                                    <p style="margin-left:5px">Logout </p>
+                                                </button>
+                                            </form>
                                     </div>
                                 </div>
                             </li>
+                           }
+                            else
+                            {
+                             @*  <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li> *@
+                                <a asp-area="Identity" class="btn btn-warning" asp-page="/Account/Login">
+                                  
+                                    <h6 class="mb-0">LOGIN</h6>
+                                </a>
+                            }
+
+
                         </ul>
                     </div>
                 </nav>

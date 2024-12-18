@@ -13,6 +13,7 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
 {
     [Area("Admin")]
     //[Authorize(Roles ="Admin")]
+    [Authorize]
     public class MenuItemsController : Controller
     {
         private readonly ApplicationDbContext _context;
