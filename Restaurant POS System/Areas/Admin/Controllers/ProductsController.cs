@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Restaurant_POS_System.Data;
 using Restaurant_POS_System.Models;
+using Restaurant_POS_System.Session;
 
 namespace Restaurant_POS_System.Areas.Admin.Controllers
 {
@@ -50,6 +51,57 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
             }
 
             return View(menuItems);
+        }
+
+
+        [HttpPost]
+        public IActionResult AddToCart(int itemId)
+        {
+            // Simulate session-based cart management
+            var cart = HttpContext.Session.GetObject<List<CartItem>>("Cart") ?? new List<CartItem>();
+
+            var menuItem = _db.MenuItems.FirstOrDefault(m => m.Id == itemId);
+            if (menuItem != null)
+            {
+                var existingItem = cart.FirstOrDefault(c => c.ItemId == itemId);
+                if (existingItem != null)
+                {
+                    existingItem.Quantity++;
+                }
+                else
+                {
+                    cart.Add(new CartItem { ItemId = itemId, Name = menuItem.Name, Price = menuItem.Price, Quantity = 1 });
+                }
+            }
+
+            HttpContext.Session.SetObject("Cart", cart);
+            return Json(cart);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateCart(int itemId, int quantity)
+        {
+            // Retrieve the cart from session
+            var cart = HttpContext.Session.GetObject<List<CartItem>>("Cart") ?? new List<CartItem>();
+
+            var cartItem = cart.FirstOrDefault(c => c.ItemId == itemId);
+            if (cartItem != null)
+            {
+                if (quantity <= 0)
+                {
+                    // Remove the item if quantity is 0
+                    cart.Remove(cartItem);
+                }
+                else
+                {
+                    // Update the quantity
+                    cartItem.Quantity = quantity;
+                }
+            }
+
+            // Save the updated cart to session
+            HttpContext.Session.SetObject("Cart", cart);
+            return Json(cart);
         }
 
 
