@@ -2692,7 +2692,6 @@ textarea.form-control-lg {
   display: block;
   width: 100%;
   padding: 8px 38px 8px 16px;
-  -moz-padding-start: 13px;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.5;
@@ -4767,10 +4766,8 @@ fieldset:disabled .btn {
 }
 .nav-justified .nav-item,
 .nav-justified > .nav-link {
-  -ms-flex-preferred-size: 0;
   flex-basis: 0;
   -webkit-box-flex: 1;
-  -ms-flex-positive: 1;
   flex-grow: 1;
   text-align: center;
 }
@@ -5326,7 +5323,6 @@ fieldset:disabled .btn {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 0;
-  -ms-flex-positive: 0;
   flex-grow: 0;
   padding: 0;
   overflow-y: visible;
@@ -6715,8 +6711,6 @@ fieldset:disabled .btn {
   --bs-toast-zindex: 1090;
   position: absolute;
   z-index: var(--bs-toast-zindex);
-  width: -webkit-max-content;
-  width: -moz-max-content;
   width: max-content;
   max-width: 100%;
   pointer-events: none;
