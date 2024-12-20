@@ -1,0 +1,56 @@
+﻿<div class="container mt-4">
+    <h2>Menu Items</h2>
+
+    <!-- Filter Section -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <select id="categoryFilter" class="form-select">
+                <option value="">All Categories</option>
+                @foreach (var category in ViewData["Categories"] as List<Restaurant_POS_System.Models.Category>)
+                {
+                    <option value="@category.CategoryId">@category.CategoryName</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="text" id="searchFilter" class="form-control" placeholder="Search by name">
+        </div>
+        <div class="col-md-4">
+            <button id="filterButton" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+
+    <!-- Menu Items List -->
+    <div id="menuItemsContainer" class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-2 mb-4">
+                <div class="card">
+                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 70px; width: 70px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p><strong>Price:</strong> $@item.Price</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("filterButton").addEventListener("click", function () {
+            const categoryId = document.getElementById("categoryFilter").value;
+            const search = document.getElementById("searchFilter").value;
+
+            // Perform AJAX request to fetch filtered data
+            fetch(`/Admin/Products/Index?categoryId=${categoryId}&search=${search}`)
+                .then(response => response.text())
+                .then(html => {
+                    // Replace the menu items container content
+                    document.getElementById("menuItemsContainer").innerHTML =
+                        new DOMParser().parseFromString(html, "text/html").getElementById("menuItemsContainer").innerHTML;
+                });
+        });
+    </script>
+}
