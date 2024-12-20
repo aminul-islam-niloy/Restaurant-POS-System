@@ -55,12 +55,31 @@
  }
  *@
 
+<div class="row mb-3">
+    <div class="col-md-4">
+        <select id="categoryFilter" class="form-select">
+            <option value="">All Categories</option>
+            @foreach (var category in ViewData["Categories"] as List<Restaurant_POS_System.Models.Category>)
+            {
+                <option value="@category.CategoryId">@category.CategoryName</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-4">
+        <input type="text" id="searchFilter" class="form-control" placeholder="Search by name">
+    </div>
+    <div class="col-md-4">
+        <button id="filterButton" class="btn btn-primary">Filter</button>
+    </div>
+</div>
+
+
 
 <div class="categories mb-3">
     @foreach (var category in ViewData["Categories"] as List<Restaurant_POS_System.Models.Category>)
     {
         <button class="btn btn-outline-primary category-btn" data-category-id="@category.CategoryId">
-            <img src="" alt="@category.CategoryName" style="width: 30px; height: 30px;">
+
             @category.CategoryName
         </button>
     }
@@ -73,14 +92,18 @@
             @foreach (var item in Model)
             {
                 <div class="col-md-3 mb-4">
-                    <div class="card">
+                    <div class="card" >
                         <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 100px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Name</h5>
-                            <p><strong>Price:</strong> $@item.Price</p>
-                            <button class="btn btn-sm btn-primary add-to-cart-btn" data-item-id="@item.Id">Add to Cart</button>
+                        <div class="card-body" style="height:100px">
+                            <h5 class="card-title" style="font-size:14px">@item.Name</h5>
+                            <p>Price: $@item.Price</p>
+
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-sm btn-primary add-to-cart-btn" style="margin-left:15px" data-item-id="@item.Id">Add to Cart</button>
                         </div>
                     </div>
+
                 </div>
             }
         </div>
@@ -88,12 +111,18 @@
 
     <!-- Cart Section -->
     <div class="col-md-4">
-        <h5>Cart Items</h5>
-        <div id="cartContainer">
-            <!-- Cart items will be dynamically updated here -->
-        </div>
-        <div id="cartSummary" class="mt-3">
-            <h6>Total: <span id="cartTotal">0</span></h6>
+        <div class="card" style="height:450px; margin:15px; padding:15px; justify-content:center; text-align:center">
+            <h5 class="card-header">Cart Items</h5>
+            <div id="cartContainer">
+            </div>
+            <div id="cartSummary" class="mt-10">
+                <h6>Discound : <span id="Discound">0 %</span></h6>
+                <h6>Total: <span id="cartTotal">0</span></h6>
+            </div>
+
+            <div class="card-footer mt-2">
+                <button class="btn btn-warning w-100 "  >Order Now</button>
+            </div>
         </div>
     </div>
 </div>
@@ -114,6 +143,20 @@
             });
         });
 
+        document.getElementById("filterButton").addEventListener("click", function () {
+            const categoryId = document.getElementById("categoryFilter").value;
+            const search = document.getElementById("searchFilter").value;
+
+            // Perform AJAX request to fetch filtered data
+            fetch(`/Admin/Products/Index?categoryId=${categoryId}&search=${search}`)
+                .then(response => response.text())
+                .then(html => {
+                    // Replace the menu items container content
+                    document.getElementById("menuItemsContainer").innerHTML =
+                        new DOMParser().parseFromString(html, "text/html").getElementById("menuItemsContainer").innerHTML;
+                });
+        });
+
         // Add to Cart
         document.addEventListener("click", function (e) {
             if (e.target.classList.contains("add-to-cart-btn")) {
@@ -127,47 +170,44 @@
             }
         });
 
-     // Update Cart Quantity or Remove
-    document.addEventListener("click", function (e) {
-        if (e.target.classList.contains("cart-decrease-btn") || e.target.classList.contains("cart-delete-btn")) {
-            const itemId = e.target.getAttribute("data-item-id");
-            let quantity = 0;
+        // Update Cart Quantity or Remove
+        document.addEventListener("click", function (e) {
+            if ( e.target.classList.contains("cart-delete-btn")) {
+                const itemId = e.target.getAttribute("data-item-id");
+               
 
-            if (e.target.classList.contains("cart-decrease-btn")) {
-                quantity = parseInt(e.target.getAttribute("data-quantity")) - 1;
+                fetch(`/Admin/Products/UpdateCart`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ itemId})
+                })
+                    .then(response => response.json())
+                    .then(cart => updateCart(cart));
             }
+        });
 
-            fetch(`/Admin/Products/UpdateCart`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ itemId, quantity })
-            })
-                .then(response => response.json())
-                .then(cart => updateCart(cart));
+        function updateCart(cart) {
+            const cartContainer = document.getElementById("cartContainer");
+            cartContainer.innerHTML = "";
+            let total = 0;
+
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                cartContainer.innerHTML += `
+                        <div class="cart-item d-flex align-items-center justify-content-between">
+                            <p>${item.name} x ${item.quantity}</p>
+                            <div class="cart-actions">
+                               
+                                <button class="btn btn-sm btn-danger cart-delete-btn" data-item-id="${item.itemId}">Delete</button>
+                            </div>
+                        </div>
+                    `;
+            });
+
+            document.getElementById("cartTotal").textContent = ` $${total.toFixed(2)}`;
         }
     });
 
-    function updateCart(cart) {
-        const cartContainer = document.getElementById("cartContainer");
-        cartContainer.innerHTML = "";
-        let total = 0;
-
-        cart.forEach(item => {
-            total += item.price * item.quantity;
-            cartContainer.innerHTML += `
-                <div class="cart-item d-flex align-items-center justify-content-between">
-                    <p>${item.name} x ${item.quantity}</p>
-                    <div class="cart-actions">
-                        <button class="btn btn-sm btn-warning cart-decrease-btn" data-item-id="${item.itemId}" data-quantity="${item.quantity}">-</button>
-                        <button class="btn btn-sm btn-danger cart-delete-btn" data-item-id="${item.itemId}">Delete</button>
-                    </div>
-                </div>
-            `;
-        });
-
-        document.getElementById("cartTotal").textContent = `Total: $${total.toFixed(2)}`;
-    }
-});
 
 </script>
 

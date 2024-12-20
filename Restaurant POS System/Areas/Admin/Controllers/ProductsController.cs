@@ -79,7 +79,7 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCart(int itemId, int quantity)
+        public IActionResult UpdateCart(int itemId)
         {
             // Retrieve the cart from session
             var cart = HttpContext.Session.GetObject<List<CartItem>>("Cart") ?? new List<CartItem>();
@@ -87,15 +87,10 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
             var cartItem = cart.FirstOrDefault(c => c.ItemId == itemId);
             if (cartItem != null)
             {
-                if (quantity <= 0)
+                if (cartItem.Quantity <= 0)
                 {
                     // Remove the item if quantity is 0
                     cart.Remove(cartItem);
-                }
-                else
-                {
-                    // Update the quantity
-                    cartItem.Quantity = quantity;
                 }
             }
 
@@ -105,5 +100,41 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
         }
 
 
+        [HttpPost]
+        public IActionResult UpdateCart([FromBody] CartUpdateRequest request)
+        {
+            if (request == null || request.ItemId <= 0)
+                return BadRequest("Invalid item data");
+
+            // Retrieve the cart from session
+            var cart = HttpContext.Session.GetObject<List<CartItem>>("Cart") ?? new List<CartItem>();
+
+            var cartItem = cart.FirstOrDefault(c => c.ItemId == request.ItemId);
+            if (cartItem == null)
+                return NotFound("Item not found in cart");
+
+            if (request.Quantity <= 0)
+            {
+                // Remove the item if quantity is 0
+                cart.Remove(cartItem);
+            }
+            else
+            {
+                // Update the quantity
+                cartItem.Quantity = request.Quantity;
+            }
+
+            // Save the updated cart to the session
+            HttpContext.Session.SetObject("Cart", cart);
+            return Json(cart);
+        }
     }
+
+    public class CartUpdateRequest
+    {
+        public int ItemId { get; set; }
+        public int Quantity { get; set; }
+    }
+
 }
+
