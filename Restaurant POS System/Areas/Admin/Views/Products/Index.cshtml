@@ -1,81 +1,71 @@
-﻿
+﻿<div class="row mb-3">
+    <!-- Filters Section -->
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <select id="categoryFilter" class="form-select">
+                    <option value="">All Categories</option>
+                    @foreach (var category in ViewData["Categories"] as List<Restaurant_POS_System.Models.Category>)
+                    {
+                        <option value="@category.CategoryId">@category.CategoryName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <input type="text" id="searchFilter" class="form-control" placeholder="Search by name">
+            </div>
+            <div class="col-md-2 mb-3">
+                <button id="filterButton" class="btn btn-danger">Filter</button>
+            </div>
+        </div>
 
-<div class="row mb-3">
-    <div class="col-md-3 mb-3">
-        <select id="categoryFilter" class="form-select">
-            <option value="">All Categories</option>
+        <!-- Categories Section -->
+        <div class="categories mb-3 mt-3">
             @foreach (var category in ViewData["Categories"] as List<Restaurant_POS_System.Models.Category>)
             {
-                <option value="@category.CategoryId">@category.CategoryName</option>
+                <button class="btn btn-outline-danger category-btn" data-category-id="@category.CategoryId">
+                    @category.CategoryName
+                </button>
             }
-        </select>
-    </div>
-    <div class="col-md-3 mb-3">
-        <input type="text" id="searchFilter" class="form-control" placeholder="Search by name">
-    </div>
-    <div class="col-md-2 mb-3">
-        <button id="filterButton" class="btn btn-primary">Filter</button>
-    </div>
+        </div>
 
-
-
-
-
-<div class="categories mb-3 mt-3">
-    @foreach (var category in ViewData["Categories"] as List<Restaurant_POS_System.Models.Category>)
-    {
-        <button class="btn btn-outline-primary category-btn" data-category-id="@category.CategoryId">
-
-            @category.CategoryName
-        </button>
-    }
-</div>
-
-<div class="row">
-    <!-- Menu Items -->
-    <div class="col-md-8">
+        <!-- Menu Items Section -->
         <div id="menuItemsContainer" class="row">
             @foreach (var item in Model)
             {
                 <div class="col-md-3 mb-4">
-                    <div class="card" >
+                    <div class="card">
                         <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 100px; object-fit: cover;">
                         <div class="card-body" style="height:100px">
                             <h5 class="card-title" style="font-size:14px">@item.Name</h5>
                             <p>Price: $@item.Price</p>
-
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-sm btn-primary add-to-cart-btn" style="margin-left:15px"  data-item-id="@item.Id">Add to Cart</button>
+                            <button class="btn btn-sm btn-danger add-to-cart-btn" style="margin-left:15px" data-item-id="@item.Id">Add to Cart</button>
                         </div>
                     </div>
-
                 </div>
             }
+            
         </div>
     </div>
 
-
-        <!-- Cart Section -->
-        <div class="col-md-4">
-            <div class="card shadow-sm" style="height: calc(75vh - 30px); margin: 15px; border: 1px solid #ddd;">
-                <h5 class="card-header bg-primary text-white text-center">Cart Items</h5>
-                <div id="cartContainer" class="overflow-auto p-3" style="height: calc(100% - 130px); border-bottom: 1px solid #ddd;">
-          
+    <!-- Cart Section -->
+    <div class="col-md-4">
+        <div class="card shadow-sm" style="height: calc(80vh - 30px); margin: 15px; border: 1px solid #ddd;">
+            <h5 class="card-header bg-danger text-white text-center">Cart Items</h5>
+            <div id="cartContainer" class="overflow-auto p-3" style="height: calc(100% - 130px); border-bottom: 1px solid #ddd;">
+                <!-- Cart items will be dynamically added here -->
+            </div>
+            <div class="card-footer text-center">
+                <div id="cartSummary" class="mb-3">
+                    <h6>Sales Summary</h6>
+                    <h6>Total: <span id="cartTotal">0</span></h6>
                 </div>
-                <div class="card-footer text-center">
-                    <div id="cartSummary" class="mb-3">
-                        <h6>Sales Summary</h6>
-                        <h6>Total: <span id="cartTotal">0</span></h6>
-                    </div>
-                    <button class="btn btn-warning w-100">Order Now</button>
-                </div>
+                <button class="btn btn-warning w-100">Order Now</button>
             </div>
         </div>
-
- 
-</div>
-
+    </div>
 </div>
 
 

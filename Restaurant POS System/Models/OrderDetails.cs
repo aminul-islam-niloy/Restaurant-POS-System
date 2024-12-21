@@ -34,7 +34,6 @@ namespace Restaurant_POS_System.Models
 
         public enum PaymentMethods
         {
-            Cash,
-            Card
+            Cash
         }
 }
