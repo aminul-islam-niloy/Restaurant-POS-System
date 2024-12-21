@@ -57,7 +57,6 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult AddToCart(int itemId)
         {
-            // Simulate session-based cart management
             var cart = HttpContext.Session.GetObject<List<CartItem>>("Cart") ?? new List<CartItem>();
 
             var menuItem = _db.MenuItems.FirstOrDefault(m => m.Id == itemId);
@@ -78,56 +77,34 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
             return Json(cart);
         }
 
-        [HttpPost]
-        public IActionResult UpdateCart(int itemId)
-        {
-            // Retrieve the cart from session
-            var cart = HttpContext.Session.GetObject<List<CartItem>>("Cart") ?? new List<CartItem>();
-
-            var cartItem = cart.FirstOrDefault(c => c.ItemId == itemId);
-            if (cartItem != null)
-            {
-                if (cartItem.Quantity <= 0)
-                {
-                    // Remove the item if quantity is 0
-                    cart.Remove(cartItem);
-                }
-            }
-
-            // Save the updated cart to session
-            HttpContext.Session.SetObject("Cart", cart);
-            return Json(cart);
-        }
-
 
         [HttpPost]
         public IActionResult UpdateCart([FromBody] CartUpdateRequest request)
         {
-            if (request == null || request.ItemId <= 0)
-                return BadRequest("Invalid item data");
-
-            // Retrieve the cart from session
             var cart = HttpContext.Session.GetObject<List<CartItem>>("Cart") ?? new List<CartItem>();
 
             var cartItem = cart.FirstOrDefault(c => c.ItemId == request.ItemId);
-            if (cartItem == null)
-                return NotFound("Item not found in cart");
-
-            if (request.Quantity <= 0)
+            if (cartItem != null)
             {
-                // Remove the item if quantity is 0
-                cart.Remove(cartItem);
-            }
-            else
-            {
-                // Update the quantity
-                cartItem.Quantity = request.Quantity;
+                if (request.Quantity <= 0)
+                {
+                    // Remove the item from the cart
+                    cart.Remove(cartItem);
+                }
+                else
+                {
+                    // Update the quantity
+                    cartItem.Quantity = request.Quantity;
+                }
             }
 
-            // Save the updated cart to the session
             HttpContext.Session.SetObject("Cart", cart);
             return Json(cart);
         }
+
+       
+
+
     }
 
     public class CartUpdateRequest
@@ -135,6 +112,8 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
         public int ItemId { get; set; }
         public int Quantity { get; set; }
     }
+
+
 
 }
 
