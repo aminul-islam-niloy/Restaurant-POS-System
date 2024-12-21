@@ -102,7 +102,15 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
             return Json(cart);
         }
 
-       
+        [HttpGet]
+        public IActionResult GetCartItems()
+        {
+            var cart = HttpContext.Session.GetObject<List<CartItem>>("Cart") ?? new List<CartItem>();
+            return Json(cart);
+        }
+
+
+
 
 
     }

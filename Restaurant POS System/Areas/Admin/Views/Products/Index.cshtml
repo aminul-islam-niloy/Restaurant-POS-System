@@ -61,7 +61,7 @@
             <div id="cartContainer">
             </div>
             <div id="cartSummary" class="mt-10">
-                <h6>Discound : <span id="Discound">0 %</span></h6>
+            
                 <h6>Total: <span id="cartTotal">0</span></h6>
             </div>
 
@@ -75,6 +75,11 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+
+        fetch(`/Admin/Products/GetCartItems`)
+            .then(response => response.json())
+            .then(cart => updateCart(cart));
+
         // Category Filter
         document.querySelectorAll(".category-btn").forEach(btn => {
             btn.addEventListener("click", function () {
@@ -88,15 +93,17 @@
             });
         });
 
+
         document.getElementById("filterButton").addEventListener("click", function () {
             const categoryId = document.getElementById("categoryFilter").value;
             const search = document.getElementById("searchFilter").value;
 
+           
             // Perform AJAX request to fetch filtered data
             fetch(`/Admin/Products/Index?categoryId=${categoryId}&search=${search}`)
                 .then(response => response.text())
                 .then(html => {
-                    // Replace the menu items container content
+                    
                     document.getElementById("menuItemsContainer").innerHTML =
                         new DOMParser().parseFromString(html, "text/html").getElementById("menuItemsContainer").innerHTML;
                 });
@@ -115,6 +122,8 @@
             }
         });
 
+
+
      
         document.addEventListener("click", function (e) {
             // Remove item from cart
@@ -123,7 +132,7 @@
                 fetch(`/Admin/Products/UpdateCart`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ itemId, quantity: 0 }) // Sending quantity 0 to remove the item
+                    body: JSON.stringify({ itemId, quantity: 0 }) 
                 })
                     .then(response => response.json())
                     .then(cart => updateCart(cart));
