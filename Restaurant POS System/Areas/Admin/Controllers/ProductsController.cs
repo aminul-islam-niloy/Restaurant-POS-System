@@ -35,7 +35,7 @@ namespace Restaurant_POS_System.Areas.Admin.Controllers
                     .ToListAsync();
 
                 // Cache the data for 10 minutes
-                _cache.Set("menuItems", menuItems, TimeSpan.FromMinutes(10));
+                _cache.Set("menuItems", menuItems, TimeSpan.FromMinutes(1));
             }
 
             // Filter by Category if provided
